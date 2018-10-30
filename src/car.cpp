@@ -4,9 +4,11 @@
 #include <iostream>
 #include <random>
 #include <chrono>
+#include <cmath>
+#include <set>
 
 
-
+#define MAX_INT 999999.0
 
 car::car()
 {
@@ -62,6 +64,7 @@ void car::init_a(int max_i, int max_j)
 
 
 
+
 std::pair<int,int> car::get_pos()
 {
     std::pair<int,int> aux;
@@ -71,9 +74,52 @@ std::pair<int,int> car::get_pos()
     return aux;
 }
 
-void car::move(int x, int y, bool w, bool a, bool s, bool d)
+
+
+
+void car::move(char w, char a, char s, char d, int max_i, int max_j)
 {
     
+    std::cout << "Muévete. (w,a,s,d) \n";
+    char dir;
+    
+    bool valid = false;
+    
+    do{
+    
+        std::cin >> dir;
+        
+        if((dir == 'w') && (car_.x_ > 0)){
+            if(w != 'o'){
+                valid = true;
+                car_.x_--;
+            }
+        }
+        
+        
+        if((dir == 'a') && (car_.y_ > 0)){
+            if(a != 'o'){
+                valid = true;
+                car_.y_--;
+            }
+        }
+        
+        
+        if((dir == 's') && (car_.x_ < max_i)){
+            if(s != 'o'){
+                valid = true;
+                car_.x_++;
+            }
+        }
+        
+        if((dir == 'd') && (car_.y_ < max_j)){
+            if(d != 'o'){
+                valid = true;
+                car_.y_++;
+            }
+        }
+        
+    }while(valid == false);
     
     
 }
@@ -81,17 +127,145 @@ void car::move(int x, int y, bool w, bool a, bool s, bool d)
 
 
 
-void car::autom()
+
+void car::autom(char w, char a, char s, char d, int fin_x, int fin_y)
 {
+    float min;
+    float dist_w = MAX_INT;
+    float dist_a =  MAX_INT;
+    float dist_s = MAX_INT;
+    float dist_d = MAX_INT;
+    
+    
+    std::set<float> dist;
+    
+    
+    
+    
+    
+    if(w != 'o'){
+        dist_w = heuristic(fin_x, fin_y, 'w');
+        dist.insert(dist_w);
+    }
+        
+        
+    if(a != 'o'){
+        dist_a = heuristic(fin_x, fin_y, 'a');
+        dist.insert(dist_a);
+    }
+        
+        
+    if(s != 'o'){
+        dist_s = heuristic(fin_x, fin_y, 's');
+        dist.insert(dist_s);
+    }
+
+    if(d != 'o'){
+        dist_d = heuristic(fin_x, fin_y, 'd');
+        dist.insert(dist_d);
+    }
+  
+
+    std::cout << dist_a << ' ' << dist_s << ' ' << dist_d << ' ' << dist_w << '\n';
+
+
+    if(dist_w == *dist.begin()){
+        car_.x_--;
+        
+    }
+    
+    else if(dist_a == *dist.begin()){
+        car_.y_--;
+        
+
+    }
+    
+    else if(dist_s == *dist.begin()){
+        car_.x_++;
+
+    }
+    
+    else if(dist_d == *dist.begin()){
+        car_.y_++;
+
+    }
     
     
 }
 
+
+
+float car::heuristic(int fin_x, int fin_y, char dir)
+{
+
+
+    float r;
+
+
+    if(dir == 'w'){
+        r = sqrt(pow((fin_x - (car_.x_ - 1)), 2.0) + pow((fin_y - car_.y_), 2.0)); 
+    }
+    
+    
+    else if (dir == 'a'){
+        r = sqrt(pow((fin_x - car_.x_), 2.0) + pow((fin_y - (car_.y_ - 1)), 2.0)); 
+    }
+
+    
+    else if(dir == 's'){
+        r = sqrt(pow((fin_x - (car_.x_ + 1)), 2.0) + pow((fin_y - car_.y_), 2.0)); 
+    }
+
+    else if(dir == 'd'){
+        r = sqrt(pow((fin_x - car_.x_), 2.0) + pow((fin_y - (car_.y_ + 1)), 2.0)); 
+    }
+
+    
+    //std::cout << "La distancia al punto es: " << r << '\n';
+    
+    
+    return r;
+
+/*
+    if(dir == 'w'){
+        if(fin_x < car_.x_)
+            car_.x_--;
+    }
+    
+    
+    else if (dir == 'a'){
+        if(fin_y < car_.y_)
+            car_.y_--;
+        
+    }
+
+    
+    else if(dir == 's'){
+        if(fin_x > car_.x_)
+            car_.x_++;
+        
+        
+    }
+
+    else if(dir == 'd'){
+        if(fin_y > car_.y_)
+            car_.y_--;
+        
+    }
+
+*/
+}
 
 
 
 std::ostream& car::write(std::ostream& os)
 {
+    
+
+
+    char a = 'Y';
+    
+    std::cout << a << "  ";
     
     return os;   
 }

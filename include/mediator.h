@@ -16,9 +16,9 @@ public:
     
     ~mediator();
     
-    void run();         // Itera hasta que acabe.
+    void run(int x, int y);         // Itera hasta que acabe.
     
-    std::ostream& write(std::ostream& os);
+    std::ostream& write(std::ostream& os, int i, int j);
     
     
     

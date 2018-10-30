@@ -21,7 +21,7 @@ mediator::mediator()
         std::cin >> i;
         std::cin >> j;
         
-        std::cout << "Cuál es la probabilidad de obstáculos que deseas? \n";
+        std::cout << "Cuál es la probabilidad de obstáculos que deseas? (sólo \n";
         
         do{
         std::cout << "Introduce un número del 0-9 (siendo 9 la mayor probabilidad permitida): ";
@@ -55,9 +55,10 @@ mediator::mediator()
             
             char cont = T.get_pos(pos_x, pos_y);
             
-            if(cont == ' ')
+            if(cont == ' '){
                 valid = true;
-            
+                std::cout << "Coche colocado en " << pos_x << ' ' << pos_y << '\n';
+            }
             
 
         }while(valid == false);
@@ -69,20 +70,30 @@ mediator::mediator()
         
         bool valid = false;
         
+            int pos_x;
+            int pos_y;
+            
         do{
-        
+            
+            
             std::cout << "Introduzca posición x: ";
-            std::cin >> i;
+            std::cin >> pos_x;
             std::cout << "Introduzca posición y: ";
-            std::cin >>j;
+            std::cin >> pos_y;
         
-            if(T.get_pos(i,j) != 'o'){        
-                C.init_m(i, j);
+        
+            
+            if((T.get_pos(pos_x,pos_y) != 'o') && (pos_x <= T.get_m()) && (pos_y <= T.get_n())){        
+                C.init_m(pos_x, pos_y);
                 valid = true;
             }
             
         }while(valid == false);
+        
+        
     }
+        std::cout << "Se pasará a escribir el terreno con el coche posicionado \n";
+        write(std::cout, i, j);
     
 }
 
@@ -91,16 +102,74 @@ mediator::mediator()
 
 mediator::~mediator()
 {
-    T.~terrain();
-    C.~car();
     
 }
 
 
 
 
-void mediator::run()
+void mediator::run(int x, int y)
 {
+    
+    std::cout << "Se empezará el recorrido (sólo modo manual) \n";
+    
+
+    bool end = false;
+    
+    int opt = 1;
+    
+    int i = T.get_m();
+    int j = T.get_n();
+    
+
+    if(opt == 0){
+        do
+        {
+            
+            std::pair<int,int> pos = C.get_pos();
+            
+            T.set_pos(pos.first, pos.second, '*');
+        
+            char w = T.get_pos(pos.first -1, pos.second);
+            char a = T.get_pos(pos.first, pos.second - 1);
+            char s = T.get_pos(pos.first + 1, pos.second);
+            char d = T.get_pos(pos.first, pos.second + 1);
+        
+            C.move(w, a, s, d, i, j);
+        
+            write(std::cout, T.get_m(), T.get_n());
+        
+        }while (end == false);
+    }
+    
+    else{
+
+
+        int i = 0;
+        do
+        {
+            std::pair<int,int> pos = C.get_pos();
+            
+            T.set_pos(pos.first, pos.second, '*');
+            
+            char w = T.get_pos(pos.first -1, pos.second);
+            char a = T.get_pos(pos.first, pos.second - 1);
+            char s = T.get_pos(pos.first + 1, pos.second);
+            char d = T.get_pos(pos.first, pos.second + 1);
+        
+            
+            C.autom(w, a, s, d, x, y);
+        
+            if((pos.first == x) && (pos.second == y))
+                end = true;
+            //i++;
+        
+           write(std::cout, T.get_m(), T.get_n());
+        
+        
+        }while (end == false);
+    }
+    
     
     
     
@@ -109,8 +178,46 @@ void mediator::run()
 
 
 
-std::ostream& mediator::write(std::ostream& os)
+std::ostream& mediator::write(std::ostream& os, int m, int n)
 {
+        //system("clear");
+
+    
+    for(int i = 0; i <= 2*m; i++)
+        std::cout << '_';
+    
+    std::cout << '\n';
+    
+    
+    
+    for(int i = 0; i < m; i++){
+        for(int j = 0; j < n; j++){
+            
+            if(j == 0)
+                std::cout << '|';
+            
+            std::pair<int,int> aux = C.get_pos();
+            
+            if((i == aux.first) && (j == aux.second))
+                C.write(std::cout);
+            else
+                T.write_char(std::cout, i, j);
+            
+            if(j >= (n - 1))
+                std::cout << '|' << '\n';
+            
+        }
+    }
+    
+    
+    for(int i = 0; i <= 2*m; i++)
+        std::cout << '_';
+    
+    std::cout << '\n';
+
+    
     
     return os;
 }
+
+

@@ -21,10 +21,16 @@ public:
     void create(int m, int n, int p);              //Crea el terreno y lo imprimes
     void w();                               //Manda a imprimir el terreno
     
+    
+    int get_m();
+    int get_n();
     char get_pos(int i, int j);
     void set_pos(int i, int j, char a);
 
-    std::ostream& write_char(std::ostream& os, char a, int i, int j);       //Escribe una posición del terreno
+    void fill();
+
+
+    std::ostream& write_char(std::ostream& os, int i, int j);       //Escribe una posición del terreno
         
     std::ostream& write_all(std::ostream& os);                              //Escribe el terreno entero
 

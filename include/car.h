@@ -27,9 +27,11 @@ public:
     
     std::pair<int,int> get_pos();
     
-    void move(int x, int y, bool w, bool a, bool s, bool d);    //Mueves el coche de manera manual  (Sin implementar)
+    void move(char w, char a, char s, char d, int i, int j);      //Mueves el coche de manera manual  (Sin implementar)
 
-    void autom();           //El coche se mueve de manera automática (sin implementar)
+    void autom(char w, char a, char s, char d, int fin_x, int fin_y);     //El coche se mueve de manera automática (sin implementar)
+    
+    float heuristic(int x, int y, char d);
 
     std::ostream& write(std::ostream& os);
 };

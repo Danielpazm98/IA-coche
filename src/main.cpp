@@ -12,6 +12,8 @@ int main()
     std::cout << "Empieza el programa \n";
     mediator M;
 
+    M.run(40, 40);
+
     return 0;
 }
 
