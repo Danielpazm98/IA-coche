@@ -5,7 +5,7 @@ ODIR=../src
 IDIR=../include
 
 
-_OBJ = car.o terrain.o mediator.o main.o
+_OBJ = car.o terrain.o mediator.o path.o node.o main.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all:main
@@ -17,6 +17,12 @@ $(ODIR)/terrain.o: $(ODIR)/terrain.cpp
 	$(CC) -c -o $@ $< $(CXXFLAGS)
 
 $(ODIR)/mediator.o: $(ODIR)/mediator.cpp  
+	$(CC) -c -o $@ $< $(CXXFLAGS)
+
+$(ODIR)/path.o: $(ODIR)/path.cpp
+	$(CC) -c -o $@ $< $(CXXFLAGS)
+
+$(ODIR)/node.o: $(ODIR)/node.cpp
 	$(CC) -c -o $@ $< $(CXXFLAGS)
 
 main.o: $(ODIR)/main.cpp
