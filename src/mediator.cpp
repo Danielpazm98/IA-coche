@@ -2,7 +2,7 @@
 
 
 
-
+        // Inicializa el terreno y el coche.
 mediator::mediator()
 {
     char opt;
@@ -181,12 +181,29 @@ void mediator::run(int x, int y)
 */
 
 
-
-float mediator::heuristic(int start_x, int start_y, int end_x, int end_y)
+        // Calcula el la distancia más corta, de 3 maneras diferentes
+float mediator::heuristic(int start_x, int start_y, int end_x, int end_y, int opt)
 {
-    float r = sqrt(pow((end_x - (start_x - 1)), 2.0) + pow((end_y - start_y), 2.0)); 
+    if(opt == 1){
+        float r = sqrt(pow((end_x - (start_x - 1)), 2.0) + pow((end_y - start_y), 2.0)); 
+        return r;
+    }
     
-    return r;
+    else if(opt == 2){
+        int dif_x = abs(start_x) - abs(end_x);
+        int dif_y = abs(start_y) - abs(end_y);
+    
+        float r = dif_x + dif_y;
+        return r;
+    }
+    
+    else
+    {
+    float r1 = heuristic(start_x, start_y, end_x, end_y, 1);
+    float r2 = heuristic(start_x, start_y, end_x, end_y, 2);
+    
+    return (r1 < r2) ? r1 : r2;        
+    }
 }
 
 
@@ -205,8 +222,8 @@ float mediator::heuristic_2(int start_x, int start_y, int end_x, int end_y)
 
 float mediator::heuristic_min(int start_x, int start_y, int end_x, int end_y)
 {
-    float r1 = heuristic(start_x, start_y, end_x, end_y);
-    float r2 = heuristic_2(start_x, start_y, end_x, end_y);
+    float r1 = heuristic(start_x, start_y, end_x, end_y, 1);
+    float r2 = heuristic(start_x, start_y, end_x, end_y, 2);
     
     return (r1 < r2) ? r1 : r2;
 }
@@ -257,8 +274,8 @@ std::ostream& mediator::write(std::ostream& os, int m, int n)
 
 
 
-
-std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& actual_path)
+        //Encuentra nuevos caminos, y los añade a la lista
+std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& actual_path, int opt)
 {
     
     int end_x = 40;
@@ -290,7 +307,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
 
         aux.add(nw.get_x(), nw.get_y());
         
-        cost = heuristic(start_x - 1, start_y, end_x, end_y);
+        cost = heuristic(start_x - 1, start_y, end_x, end_y, opt);
         aux.update_cost(cost);
         
         new_path_list.push_front(aux);
@@ -303,7 +320,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
 
         aux.add(na.get_x(), na.get_y());
         
-        cost = heuristic(start_x, start_y - 1, end_x, end_y);
+        cost = heuristic(start_x, start_y - 1, end_x, end_y, opt);
         aux.update_cost(cost);
         
         new_path_list.push_front(aux);
@@ -316,7 +333,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
 
         aux.add(ns.get_x(), ns.get_y());
         
-        cost = heuristic(start_x + 1, start_y, end_x, end_y);
+        cost = heuristic(start_x + 1, start_y, end_x, end_y, opt);
         aux.update_cost(cost);
         
         new_path_list.push_front(aux);
@@ -331,7 +348,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
     
         aux.add(nd.get_x(), nd.get_y());
         
-        cost = heuristic(start_x, start_y + 1, end_x, end_y);
+        cost = heuristic(start_x, start_y + 1, end_x, end_y, opt);
         aux.update_cost(cost);
         
         new_path_list.push_front(aux);
@@ -345,7 +362,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
 
 
 
-
+        //Algoritmo A*
 bool mediator::astar(node start, node goal)
 {
     std::list<path> open_list;
@@ -353,10 +370,15 @@ bool mediator::astar(node start, node goal)
     bool solution = false;
     
     
+    int opt;
+    std::cout << "qué función heurística quieres usar? (1: pitágoras; 2: la otra; 3: mínimo) \n";
+    std::cin >> opt;
+    
+    
     path initial_path;
     initial_path.add(start.get_x(), start.get_y());
     
-    float cost = heuristic(start.get_x(), start.get_y(), goal.get_x(), goal.get_y());
+    float cost = heuristic(start.get_x(), start.get_y(), goal.get_x(), goal.get_y(), opt);
     
     initial_path.update_cost(cost);
     
@@ -381,7 +403,7 @@ bool mediator::astar(node start, node goal)
             
             std::list<path> new_path_list;
             if(explore){
-                find_new_paths(new_path_list, aux);
+                find_new_paths(new_path_list, aux, opt);
             }
             for(std::list<path>::iterator list_iter = new_path_list.begin(); list_iter != new_path_list.end(); ++list_iter)
                 insert_path_open_list(open_list, close_list, (*list_iter).get_path());
@@ -414,7 +436,7 @@ bool mediator::astar(node start, node goal)
 }
 
 
-
+        //Inserta caminos en una lista secundaria
 bool mediator::insert_path_close_list(std::list<path>& close_list,path& path2) {
 
     bool exist = false;
@@ -450,7 +472,7 @@ bool mediator::insert_path_close_list(std::list<path>& close_list,path& path2) {
 }
 
 
-
+    //Lista principal, con el camino más rápido
 bool mediator::insert_path_open_list(std::list<path>& open_list,std::list<path>& close_list,path path2)
 {
 
