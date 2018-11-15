@@ -228,8 +228,10 @@ std::ostream& terrain::write_char(std::ostream& os, int i, int j)
 
 std::ostream& terrain::write_all(std::ostream& os)
 {
+    system("clear");
     
 
+    
     for(int i = 0; i < ((m_*4) + 2); i++)
         std::cout << '_';
     

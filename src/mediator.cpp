@@ -75,11 +75,13 @@ mediator::mediator()
             
             
             std::cout << "Introduzca posición x: ";
+            std::cin.clear();
             std::cin >> pos_x;
             std::cout << "Introduzca posición y: ";
+            std::cin.clear();
             std::cin >> pos_y;
-        
-        
+            std::cin.clear();
+            
             
             if((T.get_pos(pos_x,pos_y) != 'o') && (pos_x <= T.get_m()) && (pos_y <= T.get_n())){        
                 C.init_m(pos_x, pos_y);
@@ -91,13 +93,17 @@ mediator::mediator()
         
     }
     
-    node start;
     std::pair<int,int> car_start = C.get_pos();
-    start.set_node(car_start.first, car_start.second);
+    
+
+    node start(car_start.first, car_start.second);
     node end(40,40);
         std::cout << "Se pasará a escribir el terreno con el coche posicionado \n";
         write(std::cout, i, j);
-    
+
+
+    std::cout << "Punto inicial es: " << car_start.first <<  ' ' << car_start.second << '\n';
+    std::cout << "Punto inicial es: " << start.get_x() << ' ' << start.get_y() << '\n';
     
     astar(start, end);
 }
@@ -213,22 +219,20 @@ float mediator::heuristic(int start_x, int start_y, int end_x, int end_y, int op
 
 float mediator::heuristic_1(int start_x, int start_y, int end_x, int end_y)
 {
-    float dif_x = abs(start_x) - abs(end_x);
-    float dif_y = abs(start_y) - abs(end_y);
-    
-    float r = dif_x + dif_y;
-    
-    return r;
+        float r = sqrt(pow((end_x - (start_x - 1)), 2.0) + pow((end_y - start_y), 2.0)); 
+        return r;
 }
 
 
 
 float mediator::heuristic_2(int start_x, int start_y, int end_x, int end_y)
 {
-    float r1 = heuristic(start_x, start_y, end_x, end_y, 1);
-    float r2 = heuristic(start_x, start_y, end_x, end_y, 2);
+    float dif_x = abs(start_x - end_x);
+    float dif_y = abs(start_y - end_y);
     
-    return (r1 < r2) ? r1 : r2;
+    float r = dif_x + dif_y;
+    return r;
+
 }
 
 
@@ -372,9 +376,11 @@ bool mediator::astar(node start, node goal)
     std::list<path> close_list;
     bool solution = false;
     
+    std::cout << "Punto inicial es: " << start.get_x() << ' ' << start.get_y() << '\n';
+    
     
     int opt;
-    std::cout << "qué función heurística quieres usar? (1: pitágoras; 2: la otra; 3: mínimo) \n";
+    std::cout << "Qué función heurística quieres usar? (1: pitágoras; 2: la otra; 3: mínimo) \n";
     std::cin >> opt;
     
     

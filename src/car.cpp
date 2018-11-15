@@ -30,7 +30,10 @@ car::~car()
 void car::init_m(int x, int y)
 {
     car_.x_ = x;
-    car_.x_ = y;
+    car_.y_ = y;
+    
+    std::cout << x << ' ' << y << '\n';
+    std::cout << car_.x_ << ' ' << car_.y_ << '\n';
     car_.direc_ = 'w';
 }
 
@@ -70,6 +73,8 @@ std::pair<int,int> car::get_pos()
     std::pair<int,int> aux;
     aux.first = car_.x_;
     aux.second = car_.y_;
+     
+    //std::cout << car_.x_ << ' ' << car_.y_ << '\n';
     
     return aux;
 }
