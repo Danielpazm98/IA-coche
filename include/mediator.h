@@ -14,7 +14,10 @@ private:
     car C;
     terrain T;
     std::vector<path> P;
-
+    
+    int counter;
+    int counter_p;
+    
 public:
     mediator();
     

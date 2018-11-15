@@ -5,6 +5,9 @@
         // Inicializa el terreno y el coche.
 mediator::mediator()
 {
+    
+    counter = 0;
+    counter_p = 0;
     char opt;
     
     std::cout << "Deseas introducir el tamaño del mapa y la probabilidad de obstáculos? (S/N) (por defecto: 50x50, 25%) \n";
@@ -318,6 +321,8 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
         aux.update_cost(cost);
         
         new_path_list.push_front(aux);
+        
+        counter++;
     }
 
     if((a != 'o') | (a > 0)){
@@ -331,6 +336,8 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
         aux.update_cost(cost);
         
         new_path_list.push_front(aux);
+        
+        counter++;
 
     }
 
@@ -345,7 +352,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
         
         new_path_list.push_front(aux);
 
-        
+        counter++;
     }
 
     if((d != 'o') | (d < T.get_n())){
@@ -360,6 +367,7 @@ std::list<path> mediator::find_new_paths(std::list<path>& new_path_list,  path& 
         
         new_path_list.push_front(aux);
         
+        counter++;
     }
 
     
@@ -431,6 +439,8 @@ bool mediator::astar(node start, node goal)
         for(int i = 0; i < solution_path.get_size(); i++) {
             T.set_pos(solution_path[i].get_x(), solution_path[i].get_y(), 'x');
             
+            counter_p++;
+            
             T.write_all(std::cout);
         }
         
@@ -442,6 +452,10 @@ bool mediator::astar(node start, node goal)
     {
         std::cout << "No hay solución  \n";
     }
+    
+    std::cout << counter << '\n';
+    std::cout << counter_p << '\n';
+    
 }
 
 
