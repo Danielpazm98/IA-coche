@@ -24,8 +24,8 @@ public:
     
     
     float heuristic(int start_x, int start_y, int end_x, int end_y, int opt);
+    float heuristic_1(int start_x, int start_y, int end_x, int end_y);
     float heuristic_2(int start_x, int start_y, int end_x, int end_y);
-    float heuristic_min(int start_x, int start_y, int end_x, int end_y);
     
     
     std::list<path> find_new_paths(std::list<path>& new_path_list, path& actual_path, int opt);

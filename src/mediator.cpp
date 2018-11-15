@@ -190,8 +190,8 @@ float mediator::heuristic(int start_x, int start_y, int end_x, int end_y, int op
     }
     
     else if(opt == 2){
-        int dif_x = abs(start_x) - abs(end_x);
-        int dif_y = abs(start_y) - abs(end_y);
+        float dif_x = abs(start_x - end_x);
+        float dif_y = abs(start_y - end_y);
     
         float r = dif_x + dif_y;
         return r;
@@ -199,19 +199,22 @@ float mediator::heuristic(int start_x, int start_y, int end_x, int end_y, int op
     
     else
     {
-    float r1 = heuristic(start_x, start_y, end_x, end_y, 1);
-    float r2 = heuristic(start_x, start_y, end_x, end_y, 2);
+    float r1 = heuristic_1(start_x, start_y, end_x, end_y);
+    float r2 = heuristic_2(start_x, start_y, end_x, end_y);
     
-    return (r1 < r2) ? r1 : r2;        
+    if(r1 < r2)
+        return r1;
+    else
+        return r2;
     }
 }
 
 
 
-float mediator::heuristic_2(int start_x, int start_y, int end_x, int end_y)
+float mediator::heuristic_1(int start_x, int start_y, int end_x, int end_y)
 {
-    int dif_x = abs(start_x) - abs(end_x);
-    int dif_y = abs(start_y) - abs(end_y);
+    float dif_x = abs(start_x) - abs(end_x);
+    float dif_y = abs(start_y) - abs(end_y);
     
     float r = dif_x + dif_y;
     
@@ -220,7 +223,7 @@ float mediator::heuristic_2(int start_x, int start_y, int end_x, int end_y)
 
 
 
-float mediator::heuristic_min(int start_x, int start_y, int end_x, int end_y)
+float mediator::heuristic_2(int start_x, int start_y, int end_x, int end_y)
 {
     float r1 = heuristic(start_x, start_y, end_x, end_y, 1);
     float r2 = heuristic(start_x, start_y, end_x, end_y, 2);
