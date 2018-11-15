@@ -2,7 +2,9 @@
 
 #include <iostream>
 #include <vector>
-
+#include <queue>
+#include <cmath>
+#include <limits>
 
     //Estructura. tiene Posición y dirección.
 struct C
@@ -12,6 +14,8 @@ struct C
     char direc_;
     
 };
+
+
 
 class car
 {
@@ -31,7 +35,10 @@ public:
 
     void autom(char w, char a, char s, char d, int fin_x, int fin_y);     //El coche se mueve de manera automática (sin implementar)
     
-    float heuristic(int x, int y, char d);
+    float heuristic(std::pair<int,int> p, int x, int y);
+
+    float heuristic(int x, int y, char a);
+
 
     std::ostream& write(std::ostream& os);
 };

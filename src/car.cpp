@@ -126,7 +126,7 @@ void car::move(char w, char a, char s, char d, int max_i, int max_j)
 
 
 
-
+/*
 
 void car::autom(char w, char a, char s, char d, int fin_x, int fin_y)
 {
@@ -226,35 +226,21 @@ float car::heuristic(int fin_x, int fin_y, char dir)
     
     return r;
 
-/*
-    if(dir == 'w'){
-        if(fin_x < car_.x_)
-            car_.x_--;
-    }
-    
-    
-    else if (dir == 'a'){
-        if(fin_y < car_.y_)
-            car_.y_--;
-        
-    }
+}
 
-    
-    else if(dir == 's'){
-        if(fin_x > car_.x_)
-            car_.x_++;
-        
-        
-    }
 
-    else if(dir == 'd'){
-        if(fin_y > car_.y_)
-            car_.y_--;
-        
-    }
+
+float car::heuristic(std::pair<int,int> pos, int end_x, int end_y)
+{
+    float r;
+    
+    r = sqrt(pow((end_x - (pos.first - 1)), 2.0) + pow((end_y - pos.second), 2.0)); 
+    
+    return r;
+    
+}
 
 */
-}
 
 
 

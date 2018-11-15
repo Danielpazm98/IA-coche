@@ -1,0 +1,27 @@
+#include "node.h"
+
+
+
+node::node()
+{
+    
+    
+    
+}
+
+
+
+node::node(int x, int y)
+{
+    x_ = x;
+    y_ = y;
+}
+
+
+
+void node::set_node(int x, int y)
+{
+    x_ = x;
+    y_ = y;
+
+}
